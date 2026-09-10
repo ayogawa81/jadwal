@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Display Jadwal Kegiatan Online Synchronized - Cyber Modern</title>
+<title>Display Jadwal, Spek Senjata & Kendaraan Live</title>
 
 <!-- Konfigurasi PWA In-line -->
-<link rel="manifest" href='data:application/manifest+json,{"name":"Jadwal Kegiatan Slog","short_name":"Jadwal Slog","start_url":"./index.html","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3652/3652191.png","sizes":"512x512","type":"image/png"}]}'>
+<link rel="manifest" href='data:application/manifest+json,{"name":"Display Pameran & Jadwal","short_name":"Display Slog","start_url":"./index.html","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3652/3652191.png","sizes":"512x512","type":"image/png"}]}'>
 <meta name="theme-color" content="#0f172a">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,230 +14,122 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
 html, body {
-  width: 100%;
-  height: 100%;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
+  width: 100%; height: 100%; overflow: hidden;
   background: radial-gradient(circle at 10% 20%, #0f172a 0%, #020617 90%);
-  color: #f8fafc;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-body::before {
-  content: ''; position: absolute; top: -10%; left: -10%; width: 40%; height: 40%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%); pointer-events: none;
-}
-
-body::after {
-  content: ''; position: absolute; bottom: -10%; right: -10%; width: 40%; height: 40%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(0,0,0,0) 70%); pointer-events: none;
+  color: #f8fafc; display: flex; flex-direction: column; position: relative;
 }
 
 header {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px);
   padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); z-index: 10;
-  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0;
 }
 
 .logo-title h1 {
-  font-size: 1.8rem; font-weight: 800; letter-spacing: 1.5px;
+  font-size: 1.6rem; font-weight: 800; letter-spacing: 1.5px;
   background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
 }
 
-.logo-title p { color: #94a3b8; font-size: 0.9rem; margin-top: 2px; font-weight: 400; }
-
 .datetime-container {
-  text-align: right; background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px);
+  text-align: right; background: rgba(30, 41, 59, 0.5);
   padding: 8px 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex; align-items: center; gap: 15px;
 }
 
-#clock {
-  font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700;
-  color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.4); line-height: 1;
-}
+#clock { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 700; color: #38bdf8; }
 
-#date { font-size: 0.85rem; color: #cbd5e1; margin-top: 4px; font-weight: 500; }
+.header-btns { display: flex; gap: 8px; }
 
 .btn-setting {
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #f8fafc;
-  border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 18px; border-radius: 12px;
-  cursor: pointer; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15); padding: 8px 14px; border-radius: 10px;
+  cursor: pointer; font-weight: 600; font-size: 0.85rem;
 }
 
-.btn-setting:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border-color: #60a5fa;
-  transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+.btn-weapon {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff;
+  border: 1px solid rgba(248, 113, 113, 0.3); padding: 8px 14px; border-radius: 10px;
+  cursor: pointer; font-weight: 700; font-size: 0.85rem;
 }
 
-main { 
-  flex: 1; 
-  padding: 20px 30px; 
-  display: flex; 
-  flex-direction: column; 
-  z-index: 1; 
-  overflow: hidden; 
-  height: calc(100% - 90px);
+.btn-vehicle {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff;
+  border: 1px solid rgba(251, 191, 36, 0.3); padding: 8px 14px; border-radius: 10px;
+  cursor: pointer; font-weight: 700; font-size: 0.85rem;
 }
+
+main { flex: 1; padding: 20px 30px; display: flex; flex-direction: column; overflow: hidden; }
 
 .table-container {
-  width: 100%; 
-  height: 100%;
-  background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);
-  border-radius: 20px; overflow-y: auto; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);
+  border-radius: 20px; overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; }
+th { position: sticky; top: 0; background: rgba(30, 41, 59, 0.95); color: #38bdf8; padding: 16px 15px; }
+td { padding: 14px 15px; color: #e2e8f0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-th {
-  position: sticky; top: 0; z-index: 5;
-  background: rgba(30, 41, 59, 0.95); color: #38bdf8; font-size: 0.95rem; font-weight: 700;
-  padding: 16px 15px; text-transform: uppercase; letter-spacing: 0.8px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-}
-
-td {
-  padding: 14px 15px; font-size: 0.95rem; color: #e2e8f0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; transition: background 0.2s;
-}
-
-tr:hover td { background: rgba(51, 65, 85, 0.3); }
-
-.col-time { font-weight: 700; color: #fbbf24; font-family: 'JetBrains Mono', monospace; width: 18%; }
-.col-event { font-weight: 600; color: #ffffff; width: 20%; }
-.col-leader { color: #c084fc; font-weight: 600; width: 16%; }
-.col-personnel { color: #38bdf8; font-weight: 500; width: 15%; }
-.col-room { color: #cbd5e1; width: 11%; }
-.col-status { text-align: center; width: 10%; }
-.col-action { text-align: center; width: 10%; }
-
-.status-badge {
-  display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
-  font-weight: 700; text-transform: uppercase; text-align: center; letter-spacing: 0.5px;
-}
-
-.status-ongoing {
-  background: rgba(59, 130, 246, 0.15); color: #60a5fa;
-  border: 1px solid rgba(96, 165, 250, 0.4); box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
-}
-
-.status-waiting { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
-.status-done { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); }
-
-.btn-action-group { display: flex; gap: 8px; justify-content: center; align-items: center; }
-
-.btn-icon {
-  background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
-  cursor: pointer; transition: all 0.2s; color: #f8fafc; fill: currentColor;
-}
-
-.btn-icon svg { width: 18px; height: 18px; }
-
-.btn-edit:hover { background: #f59e0b; border-color: #fbbf24; transform: scale(1.08); }
-.btn-delete:hover { background: #ef4444; border-color: #f87171; transform: scale(1.08); }
-.btn-save { background: #10b981; border-color: #34d399; }
-.btn-save:hover { background: #059669; transform: scale(1.08); }
-
-.edit-input, .edit-select, .edit-date {
-  background: #0f172a; border: 1px solid #3b82f6; color: #f8fafc;
-  padding: 6px 8px; border-radius: 6px; font-size: 0.85rem; width: 100%;
-}
-.edit-time-container { display: flex; flex-direction: column; gap: 4px; }
-.edit-time-group { display: flex; align-items: center; gap: 2px; }
-.edit-select { padding: 4px 2px; font-family: 'JetBrains Mono', monospace; }
-
+/* POPUP MODAL STYLES */
 .modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(2, 6, 23, 0.85);
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(2, 6, 23, 0.85);
   backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center;
   z-index: 1000; opacity: 0; pointer-events: none; transition: all 0.3s ease;
 }
 .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-.modal-content {
-  background: #0f172a; width: 90%; max-width: 600px;
-  border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.12); padding: 25px;
-  display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+.display-modal {
+  background: #0f172a; width: 90%; max-width: 750px; border-radius: 24px;
+  padding: 25px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
 }
 
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-.modal-header h2 { font-size: 1.3rem; color: #60a5fa; }
-.btn-close { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
+.weapon-theme { border: 2px solid #ef4444; }
+.vehicle-theme { border: 2px solid #f59e0b; }
 
-.form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-.form-group label { font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px; }
+.modal-header h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
 
-.form-group input, .time-picker-select {
-  background-color: #1e293b; border: 1px solid #334155; color: #f8fafc;
-  padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; width: 100%; color-scheme: dark;
+.item-select {
+  width: 100%; padding: 10px; background: #1e293b; border: 1px solid #475569;
+  color: #38bdf8; font-weight: 700; border-radius: 8px; margin-bottom: 15px;
 }
 
-.time-picker-group {
-  display: flex; align-items: center; gap: 4px; background-color: #1e293b;
-  border: 1px solid #334155; padding: 4px 8px; border-radius: 8px;
-}
-
-.time-picker-select {
-  border: none; background: transparent; padding: 4px 2px;
-  text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 700;
-  color: #38bdf8; font-size: 0.9rem; cursor: pointer;
-}
-
-.btn-add {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none;
-  padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%;
-  font-size: 1rem; margin-top: 10px; transition: all 0.2s;
-}
-.btn-add:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+.specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem; }
+.spec-card { background: #1e293b; padding: 10px 14px; border-radius: 10px; }
+.weapon-card { border-left: 3px solid #ef4444; }
+.vehicle-card { border-left: 3px solid #f59e0b; }
+.spec-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+.spec-val { font-weight: 700; color: #f8fafc; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
 
 #tizenAudioUnlocker {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(2, 6, 23, 0.96); z-index: 99999;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  color: white; text-align: center; padding: 20px;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 6, 23, 0.96);
+  z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
 }
 </style>
 </head>
 <body>
 
 <div id="tizenAudioUnlocker">
-  <h1 style="font-size: 2.2rem; margin-bottom: 15px; color: #38bdf8; font-weight: 800; letter-spacing: 1px;">SISTEM MONITORING JADWAL</h1>
-  <p style="font-size: 1.1rem; margin-bottom: 30px; color: #94a3b8; max-width: 500px;">Tekan tombol OK / Enter pada remote TV atau klik tombol di bawah untuk mengaktifkan audio & mode Fullscreen.</p>
-  <button id="btnUnlockTizen" onclick="bukaKunciAudioTizen()" style="padding: 18px 40px; font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; cursor: pointer; box-shadow: 0 10px 30px rgba(16,185,129,0.4);" autofocus>
-    🔊 TEKAN UNTUK AKTIFKAN SUARA
+  <h1 style="font-size: 2rem; margin-bottom: 15px; color: #38bdf8;">DISPLAY PAMERAN & MONITORING LIVE</h1>
+  <button onclick="bukaKunciAudioTizen()" style="padding: 16px 36px; font-size: 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; cursor: pointer;">
+    🔊 AKTIFKAN TAMPILAN LIVE
   </button>
 </div>
 
 <header>
   <div class="logo-title">
-    <h1>JADWAL KEGIATAN & AGENDA UTAMA</h1>
-    <p>Monitoring Waktu, Pimpinan Rapat, dan Lokasi Ruangan</p>
+    <h1>DISPLAY PAMERAN & JADWAL LIVE</h1>
   </div>
   <div class="datetime-container">
-    <div>
-      <div id="clock">00:00</div>
-      <div id="date">Memuat Tanggal...</div>
+    <div id="clock">00:00</div>
+    <div class="header-btns">
+      <button class="btn-vehicle" onclick="toggleVehicleModal(true)">🚛 Spek Kendaraan</button>
+      <button class="btn-weapon" onclick="toggleWeaponModal(true)">🎯 Spek Senjata</button>
+      <button class="btn-setting" onclick="toggleModal(true)">➕ Agenda</button>
     </div>
-    <button class="btn-setting" onclick="toggleModal(true)">➕ Tambah Agenda</button>
   </div>
 </header>
 
@@ -246,534 +138,158 @@ tr:hover td { background: rgba(51, 65, 85, 0.3); }
     <table>
       <thead>
         <tr>
-          <th class="col-time">Tanggal & Waktu</th>
-          <th class="col-event">Nama Kegiatan</th>
-          <th class="col-leader">Pimpinan</th>
-          <th class="col-personnel">Personel</th>
-          <th class="col-room">Lokasi</th>
-          <th class="col-status">Status</th>
-          <th class="col-action">Aksi</th>
+          <th>Waktu</th>
+          <th>Nama Kegiatan</th>
+          <th>Pimpinan</th>
+          <th>Lokasi</th>
         </tr>
       </thead>
       <tbody id="main-table-body">
-        <tr><td colspan="7" style="text-align: center; color: #94a3b8;">Menghubungkan ke Database Online Global...</td></tr>
+        <tr><td colspan="4" style="text-align: center;">Memuat Data...</td></tr>
       </tbody>
     </table>
   </div>
 </main>
 
-<div class="modal-overlay" id="settingModal">
-  <div class="modal-content">
+<!-- POPUP SPEK SENJATA -->
+<div class="modal-overlay" id="weaponModal">
+  <div class="display-modal weapon-theme">
     <div class="modal-header">
-      <h2>➕ Tambah Agenda Baru</h2>
-      <button class="btn-close" onclick="toggleModal(false)">✕</button>
+      <h2 style="color: #f87171;">🎯 DISPLAY TEKNIS SENJATA & ALPAL</h2>
+      <button onclick="toggleWeaponModal(false)" style="background:none; border:none; color:#94a3b8; font-size:1.5rem; cursor:pointer;">✕</button>
     </div>
+    
+    <select class="item-select" id="selectWeapon" onchange="renderWeaponData()">
+      <option value="verba">MANPADS 9K333 VERBA</option>
+      <option value="xtraim">THALES XTRAIM THERMAL SIGHT</option>
+      <option value="konus">NVG B-5-21 / KONUS</option>
+    </select>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="inputTglMulai">Tanggal Mulai:</label>
-        <input type="date" id="inputTglMulai">
-      </div>
-      <div class="form-group">
-        <label for="inputTglSelesai">Tanggal Selesai:</label>
-        <input type="date" id="inputTglSelesai">
-      </div>
+    <div class="specs-grid" id="weaponSpecsContainer"></div>
+  </div>
+</div>
+
+<!-- POPUP SPEK KENDARAAN (FITUR BARU) -->
+<div class="modal-overlay" id="vehicleModal">
+  <div class="display-modal vehicle-theme">
+    <div class="modal-header">
+      <h2 style="color: #fbbf24;">🚛 DISPLAY KENDARAAN OPERASIONAL & TAKTIS</h2>
+      <button onclick="toggleVehicleModal(false)" style="background:none; border:none; color:#94a3b8; font-size:1.5rem; cursor:pointer;">✕</button>
     </div>
+    
+    <select class="item-select" id="selectVehicle" onchange="renderVehicleData()">
+      <option value="canter">MITSUBISHI CANTER EURO 4 (ANGKUT PERSONEL/LOGISTIK)</option>
+      <option value="calya">TOYOTA CALYA (OPERASIONAL STAF)</option>
+    </select>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Jam Mulai (HH:MM):</label>
-        <div class="time-picker-group">
-          <select id="startHour" class="time-picker-select"></select><span>:</span>
-          <select id="startMinute" class="time-picker-select"></select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Jam Selesai (HH:MM):</label>
-        <div class="time-picker-group">
-          <select id="endHour" class="time-picker-select"></select><span>:</span>
-          <select id="endMinute" class="time-picker-select"></select>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputKegiatan">Nama Kegiatan:</label>
-      <input type="text" id="inputKegiatan" placeholder="Nama Agenda / Kegiatan Utama">
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label for="inputPimpinan">Pimpinan Rapat:</label>
-        <input type="text" id="inputPimpinan" placeholder="Contoh: Danpasgat, Aslog">
-      </div>
-      <div class="form-group">
-        <label for="inputPersonel">Personel / Peserta:</label>
-        <input type="text" id="inputPersonel" placeholder="Contoh: Perwira Staf">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputLokasi">Lokasi Ruangan:</label>
-      <input type="text" id="inputLokasi" placeholder="Lokasi Ruang / Tempat">
-    </div>
-
-    <button class="btn-add" id="btnAdd" onclick="addNewSchedule()">＋ Simpan ke Database</button>
+    <div class="specs-grid" id="vehicleSpecsContainer"></div>
   </div>
 </div>
 
 <script>
-const dbURL = "https://api.npoint.io/79fb87bf4e7964927964";
-
-let systemSchedules = [];
-let currentHours = "00";
-let currentMinutes = "00";
-let editingRowIndex = -1;
-let spokenSchedules = new Set();
-let audioCtx = null;
-
-const iconPencil = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
-const iconTrash = '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
-const iconSave = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-
-function requestFullScreenNative() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    elem.msRequestFullscreen();
+// Database Data Spek Senjata
+const weaponDatabase = {
+  verba: {
+    "Tipe Sistem": "MANPADS 9K333 Verba",
+    "Kaliber Proyektil": "72 mm",
+    "Jarak Tembak Efektif": "500 m - 6.000 m",
+    "Ketinggian Sasaran": "10 m - 3.500 m",
+    "Sistem Pemandu": "3-Channel Optical (UV, Near-IR, Mid-IR)",
+    "Kecepatan Target Max": "400 m/s"
+  },
+  xtraim: {
+    "Nama Alat": "Thales XTRAIM Thermal Sight",
+    "Tipe Optik": "Day / Thermal Decoupled Sight",
+    "Sensor Inti": "Uncooled Infrared (LWIR)",
+    "Pembesaran Optik": "1x (Digital Zoom 2x / 4x)",
+    "Bobot Total": "< 800 gram",
+    "Dudukan Rail": "Picatinny Rail (MIL-STD-1913)"
+  },
+  konus: {
+    "Nama Alat": "NVG B-5-21 / Konus",
+    "Kategori": "Night Vision Goggles",
+    "Generasi Tabung": "Gen 2+ / Gen 3 System",
+    "Sudut Pandang (FOV)": "40° Wide Angle",
+    "Daya Tahan Baterai": "Hingga 40 Jam (AA / CR123A)",
+    "Berat Unit": "450 gram"
   }
-}
+};
 
-function generateOptionsHTML(max, selectedVal) {
+// Database Data Spek Kendaraan Operasional
+const vehicleDatabase = {
+  canter: {
+    "Model Unit": "Mitsubishi Fuso Canter Euro 4",
+    "Fungsi Utis": "Angkut Personel / Logistik Pasukan",
+    "Kapasitas Angkut": "20 - 25 Personel Bersenjata Lengkap",
+    "Spesifikasi Mesin": "4V21-2AT1 (Common Rail Turbo Intercooler)",
+    "Standar Emisi": "Euro 4 Exhaust Gas Recirculation (EGR)",
+    "Kapasitas Beban Max": "7.5 Ton GVW"
+  },
+  calya: {
+    "Model Unit": "Toyota Calya Operasional",
+    "Fungsi Utis": "Kendaraan Dinas / Dukungan Logistik Ringan",
+    "Tipe Mesin": "1.2L NR-VE Dual VVT-i (4 Silinder)",
+    "Kapasitas Penumpang": "7 Personel (3 Baris Kursi)",
+    "Sistem Lampu": "LED Multi-Reflector Headlamp",
+    "Karakteristik Operasional": "Efisiensi Bahan Bakar Tinggi & Lincah"
+  }
+};
+
+function renderWeaponData() {
+  const selectedKey = document.getElementById('selectWeapon').value;
+  const data = weaponDatabase[selectedKey];
+  const container = document.getElementById('weaponSpecsContainer');
+
   let html = '';
-  for (let i = 0; i < max; i++) {
-    const val = String(i).padStart(2, '0');
-    html += '<option value="' + val + '" ' + (val === selectedVal ? 'selected' : '') + '>' + val + '</option>';
+  for (let [key, val] of Object.entries(data)) {
+    html += `
+      <div class="spec-card weapon-card">
+        <div class="spec-label">${key}</div>
+        <div class="spec-val">${val}</div>
+      </div>
+    `;
   }
-  return html;
+  container.innerHTML = html;
 }
 
-function initTimePickers() {
-  const populateOptions = (selectId, max) => {
-    const sel = document.getElementById(selectId);
-    if(!sel) return;
-    sel.innerHTML = generateOptionsHTML(max, '00');
-  };
+function renderVehicleData() {
+  const selectedKey = document.getElementById('selectVehicle').value;
+  const data = vehicleDatabase[selectedKey];
+  const container = document.getElementById('vehicleSpecsContainer');
 
-  populateOptions('startHour', 24);
-  populateOptions('startMinute', 60);
-  populateOptions('endHour', 24);
-  populateOptions('endMinute', 60);
+  let html = '';
+  for (let [key, val] of Object.entries(data)) {
+    html += `
+      <div class="spec-card vehicle-card">
+        <div class="spec-label">${key}</div>
+        <div class="spec-val">${val}</div>
+      </div>
+    `;
+  }
+  container.innerHTML = html;
 }
 
-function initAudioEngine() {
-  if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) audioCtx = new AudioContextClass();
-  }
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+function toggleWeaponModal(show) {
+  document.getElementById('weaponModal').classList.toggle('active', show);
+  if(show) renderWeaponData();
+}
+
+function toggleVehicleModal(show) {
+  document.getElementById('vehicleModal').classList.toggle('active', show);
+  if(show) renderVehicleData();
 }
 
 function bukaKunciAudioTizen() {
-  initAudioEngine();
-  requestFullScreenNative();
   document.getElementById('tizenAudioUnlocker').style.display = 'none';
-  playChimeNotification([523.25, 659.25, 783.99]);
 }
 
-function playTone(freq, type, duration, delay = 0) {
-  initAudioEngine();
-  if (!audioCtx) return;
-
-  setTimeout(() => {
-    try {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + duration);
-    } catch (e) {
-      console.error(e);
-    }
-  }, delay);
-}
-
-function playChimeNotification(freqs = [440, 554.37, 659.25]) {
-  freqs.forEach((f, i) => {
-    playTone(f, 'sine', 0.8, i * 250);
-  });
-}
-
-function panggilSuaraAI(teks) {
-  playChimeNotification([523.25, 659.25, 783.99, 1046.50]);
-
-  setTimeout(() => {
-    try {
-      const existingAudio = document.getElementById('audioTTS');
-      if (existingAudio) existingAudio.remove();
-
-      const encodedText = encodeURIComponent(teks);
-      const ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodedText + '&tl=id&client=tw-ob';
-
-      const audio = new Audio(ttsUrl);
-      audio.id = 'audioTTS';
-      audio.playbackRate = 0.95;
-      audio.play().catch(() => {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const speech = new SpeechSynthesisUtterance(teks);
-          speech.lang = 'id-ID';
-          speech.pitch = 1.2;
-          window.speechSynthesis.speak(speech);
-        }
-      });
-    } catch (e) {
-      console.error("Gagal memutar audio TTS:", e);
-    }
-  }, 1200);
-}
-
-function updateDateTime() {
-  try {
-    const now = new Date();
-    currentHours = String(now.getHours()).padStart(2, '0');
-    currentMinutes = String(now.getMinutes()).padStart(2, '0');
-
-    document.getElementById('clock').textContent = currentHours + ':' + currentMinutes;
-
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    document.getElementById('date').textContent = now.toLocaleDateString('id-ID', options);
-
-    updateStatusBadges();
-  } catch(err) { console.error(err); }
-}
-
-async function loadDataFromCloud() {
-  if (editingRowIndex !== -1) return;
-  try {
-    const response = await fetch(dbURL + '?_=' + new Date().getTime());
-    if (!response.ok) throw new Error("Gagal mengambil data dari server online");
-
-    systemSchedules = await response.json();
-    if (!Array.isArray(systemSchedules)) systemSchedules = [];
-    renderSchedules(false);
-  } catch (e) {
-    console.error("Error mengambil data dari cloud:", e);
-  }
-}
-
-async function saveDataToCloud() {
-  try {
-    await fetch(dbURL, {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(systemSchedules)
-    });
-  } catch (e) {
-    console.error("Gagal menyimpan data ke cloud:", e);
-  }
-}
-
-function formatTanggalIndo(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  return d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function renderSchedules(shouldSave = true) {
-  const mainTbody = document.getElementById('main-table-body');
-  if (!mainTbody) return;
-
-  mainTbody.innerHTML = '';
-
-  if (systemSchedules.length === 0) {
-    mainTbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Tidak ada agenda kegiatan saat ini. Klik + Tambah Agenda untuk membuat baru.</td></tr>';
-    if (shouldSave) saveDataToCloud();
-    return;
-  }
-
-  systemSchedules.sort((a, b) => {
-    const dateA = new Date((a.tglMulai || '') + 'T' + (a.waktu.split('-')[0] || '00:00').trim().replace(/\./g, ':'));
-    const dateB = new Date((b.tglMulai || '') + 'T' + (b.waktu.split('-')[0] || '00:00').trim().replace(/\./g, ':'));
-    return dateA - dateB;
-  });
-
-  systemSchedules.forEach((item, index) => {
-    const tr = document.createElement('tr');
-    tr.setAttribute('id', 'row-' + index);
-    
-    if (editingRowIndex === index) {
-      const parts = (item.waktu || '08:00 - 10:00').split('-');
-      const sParts = parts[0].trim().split(':');
-      const eParts = (parts[1] || '10:00').trim().split(':');
-
-      tr.innerHTML = 
-        '<td class="col-time">' +
-          '<div style="display:flex; flex-direction:column; gap:4px;">' +
-            '<input type="date" class="edit-date" id="edit-tglMulai" value="' + item.tglMulai + '">' +
-            '<input type="date" class="edit-date" id="edit-tglSelesai" value="' + (item.tglSelesai || item.tglMulai) + '">' +
-            '<div class="edit-time-container">' +
-              '<div class="edit-time-group">' +
-                '<select id="edit-sH" class="edit-select">' + generateOptionsHTML(24, sParts[0]) + '</select>:' +
-                '<select id="edit-sM" class="edit-select">' + generateOptionsHTML(60, sParts[1]) + '</select>' +
-              '</div>' +
-              '<div class="edit-time-group">' +
-                '<select id="edit-eH" class="edit-select">' + generateOptionsHTML(24, eParts[0]) + '</select>:' +
-                '<select id="edit-eM" class="edit-select">' + generateOptionsHTML(60, eParts[1]) + '</select>' +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-        '</td>' +
-        '<td class="col-event"><input type="text" class="edit-input" id="edit-kegiatan" value="' + item.kegiatan + '"></td>' +
-        '<td class="col-leader"><input type="text" class="edit-input" id="edit-pimpinan" value="' + (item.pimpinan || '') + '"></td>' +
-        '<td class="col-personnel"><input type="text" class="edit-input" id="edit-personel" value="' + (item.personel || '') + '"></td>' +
-        '<td class="col-room"><input type="text" class="edit-input" id="edit-lokasi" value="' + item.lokasi + '"></td>' +
-        '<td class="col-status"><span class="status-badge status-waiting">Edit Mode</span></td>' +
-        '<td class="col-action">' +
-          '<div class="btn-action-group">' +
-            '<button class="btn-icon btn-save" onclick="saveInlineEdit(' + index + ')" title="Simpan">' + iconSave + '</button>' +
-          '</div>' +
-        '</td>';
-    } else {
-      const cleanTimeRange = item.waktu.replace(/\s+/g, '');
-      tr.setAttribute('data-time', cleanTimeRange);
-      tr.setAttribute('data-start-date', item.tglMulai || '');
-      tr.setAttribute('data-end-date', item.tglSelesai || '');
-
-      let displayTanggal = '';
-      if (item.tglMulai === item.tglSelesai) {
-        displayTanggal = formatTanggalIndo(item.tglMulai);
-      } else {
-        displayTanggal = formatTanggalIndo(item.tglMulai) + ' s/d ' + formatTanggalIndo(item.tglSelesai);
-      }
-
-      tr.innerHTML = 
-        '<td class="col-time">' +
-          '<div style="font-size:0.8rem; color:#94a3b8; font-weight:normal; margin-bottom:2px;">' + displayTanggal + '</div>' +
-          '<div>' + item.waktu + '</div>' +
-        '</td>' +
-        '<td class="col-event">' + item.kegiatan + '</td>' +
-        '<td class="col-leader">' + (item.pimpinan || '-') + '</td>' +
-        '<td class="col-personnel">' + (item.personel || '-') + '</td>' +
-        '<td class="col-room">' + item.lokasi + '</td>' +
-        '<td class="col-status"><span class="status-badge">Memuat...</span></td>' +
-        '<td class="col-action">' +
-          '<div class="btn-action-group">' +
-            '<button class="btn-icon btn-edit" onclick="enableInlineEdit(' + index + ')" title="Edit">' + iconPencil + '</button>' +
-            '<button class="btn-icon btn-delete" onclick="deleteSchedule(' + index + ')" title="Hapus">' + iconTrash + '</button>' +
-          '</div>' +
-        '</td>';
-    }
-
-    mainTbody.appendChild(tr);
-  });
-
-  updateStatusBadges();
-  if (shouldSave) saveDataToCloud();
-}
-
-function enableInlineEdit(index) {
-  editingRowIndex = index;
-  renderSchedules(false);
-}
-
-function saveInlineEdit(index) {
-  const tglMulai = document.getElementById('edit-tglMulai').value;
-  const tglSelesai = document.getElementById('edit-tglSelesai').value;
-  
-  const sH = document.getElementById('edit-sH').value;
-  const sM = document.getElementById('edit-sM').value;
-
-  const eH = document.getElementById('edit-eH').value;
-  const eM = document.getElementById('edit-eM').value;
-
-  const kegiatan = document.getElementById('edit-kegiatan').value.trim();
-  const pimpinan = document.getElementById('edit-pimpinan').value.trim();
-  const personel = document.getElementById('edit-personel').value.trim();
-  const lokasi = document.getElementById('edit-lokasi').value.trim();
-
-  if (!tglMulai || !tglSelesai || !kegiatan || !lokasi) {
-    return alert("Lengkapi data tanggal, kegiatan, dan lokasi!");
-  }
-
-  const oldItem = systemSchedules[index];
-  const oldKey = oldItem.tglMulai + '-' + oldItem.tglSelesai + '-' + oldItem.waktu.replace(/\s+/g, '') + '-' + oldItem.kegiatan;
-  spokenSchedules.delete(oldKey + '-menunggu');
-  spokenSchedules.delete(oldKey + '-berlangsung');
-  spokenSchedules.delete(oldKey + '-selesai');
-
-  systemSchedules[index] = {
-    tglMulai, tglSelesai,
-    waktu: sH + ':' + sM + ' - ' + eH + ':' + eM,
-    kegiatan, pimpinan, personel, lokasi
-  };
-
-  editingRowIndex = -1;
-  renderSchedules(true);
-}
-
-function deleteSchedule(index) {
-  if (confirm("Apakah Anda yakin ingin menghapus agenda ini?")) {
-    systemSchedules.splice(index, 1);
-    renderSchedules(true);
-  }
-}
-
-async function addNewSchedule() {
-  const tglMulai = document.getElementById('inputTglMulai').value;
-  const tglSelesai = document.getElementById('inputTglSelesai').value;
-  
-  const sH = document.getElementById('startHour').value;
-  const sM = document.getElementById('startMinute').value;
-
-  const eH = document.getElementById('endHour').value;
-  const eM = document.getElementById('endMinute').value;
-
-  const waktu = sH + ':' + sM + ' - ' + eH + ':' + eM;
-  const kegiatan = document.getElementById('inputKegiatan').value.trim();
-  const pimpinan = document.getElementById('inputPimpinan').value.trim();
-  const personel = document.getElementById('inputPersonel').value.trim();
-  const lokasi = document.getElementById('inputLokasi').value.trim();
-
-  if (!tglMulai || !tglSelesai || !kegiatan || !lokasi) {
-    return alert("Silakan lengkapi tanggal, kegiatan, dan lokasi!");
-  }
-
-  systemSchedules.push({ tglMulai, tglSelesai, waktu, kegiatan, pimpinan, personel, lokasi });
-  renderSchedules(true);
-  
-  document.getElementById('inputKegiatan').value = '';
-  document.getElementById('inputPimpinan').value = '';
-  document.getElementById('inputPersonel').value = '';
-  document.getElementById('inputLokasi').value = '';
-  toggleModal(false);
-}
-
-function updateStatusBadges() {
-  if (editingRowIndex !== -1) return;
-
+function updateClock() {
   const now = new Date();
-  const waktuSekarangLengkap = now.getTime();
-  let hasExpiredItems = false;
-
-  document.querySelectorAll('#main-table-body tr[data-time]').forEach(row => {
-    try {
-      const timeRange = row.getAttribute('data-time');
-      const startDateStr = row.getAttribute('data-start-date');
-      const endDateStr = row.getAttribute('data-end-date');
-      if (!timeRange || !timeRange.includes('-') || !startDateStr || !endDateStr) return;
-
-      const eventName = row.querySelector('.col-event').textContent || '';
-      const leaderName = row.querySelector('.col-leader').textContent || '';
-      const roomName = row.querySelector('.col-room').textContent || '';
-      const badge = row.querySelector('.status-badge');
-      if (!badge) return;
-
-      const cleanTimeRange = timeRange.replace(/\./g, ':');
-      const [startTime, endTime] = cleanTimeRange.split('-');
-      
-      const startParts = startTime.split(':').map(Number);
-      const endParts = endTime.split(':').map(Number);
-
-      const jamMulai = startParts[0], menitMulai = startParts[1] || 0;
-      const jamSelesai = endParts[0], menitSelesai = endParts[1] || 0;
-
-      const waktuMulaiLengkap = new Date(startDateStr).setHours(jamMulai, menitMulai, 0, 0);
-      const waktuSelesaiLengkap = new Date(endDateStr).setHours(jamSelesai, menitSelesai, 59, 999);
-
-      badge.className = 'status-badge';
-      const baseKey = startDateStr + '-' + endDateStr + '-' + timeRange + '-' + eventName;
-      
-      let pimpinanText = (leaderName && leaderName !== '-') ? ', dipimpin oleh ' + leaderName : '';
-
-      if (waktuSekarangLengkap > waktuSelesaiLengkap) {
-        const keySelesai = baseKey + '-selesai';
-        if (!spokenSchedules.has(keySelesai)) {
-          spokenSchedules.add(keySelesai);
-          panggilSuaraAI('Informasi, kegiatan ' + eventName + pimpinanText + ' di lokasi ' + roomName + ' telah selesai.');
-        }
-
-        const expiredIndex = systemSchedules.findIndex(s => 
-          s.tglMulai === startDateStr && 
-          s.tglSelesai === endDateStr && 
-          s.waktu.replace(/\s+/g, '') === timeRange && 
-          s.kegiatan === eventName
-        );
-
-        if (expiredIndex !== -1) {
-          systemSchedules.splice(expiredIndex, 1);
-          hasExpiredItems = true;
-        }
-
-      } else if (waktuSekarangLengkap >= waktuMulaiLengkap && waktuSekarangLengkap <= waktuSelesaiLengkap) {
-        badge.textContent = 'Berlangsung';
-        badge.className = 'status-badge status-ongoing';
-
-        const keyBerlangsung = baseKey + '-berlangsung';
-        if (!spokenSchedules.has(keyBerlangsung)) {
-          spokenSchedules.add(keyBerlangsung);
-          panggilSuaraAI('Perhatian, kegiatan ' + eventName + pimpinanText + ' di lokasi ' + roomName + ' sedang berlangsung.');
-        }
-
-      } else {
-        badge.textContent = 'Menunggu';
-        badge.className = 'status-badge status-waiting';
-
-        const keyMenunggu = baseKey + '-menunggu';
-        if (!spokenSchedules.has(keyMenunggu)) {
-          spokenSchedules.add(keyMenunggu);
-          panggilSuaraAI('Pemberitahuan, kegiatan ' + eventName + pimpinanText + ' di lokasi ' + roomName + ' dalam status menunggu.');
-        }
-      }
-
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  if (hasExpiredItems) {
-    renderSchedules(true);
-  }
+  document.getElementById('clock').textContent = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 }
 
-function toggleModal(show) {
-  document.getElementById('settingModal').classList.toggle('active', show);
-}
-
-// Register PWA Service Worker Inline
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    self.addEventListener('install', e => self.skipWaiting());
-    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-    self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
-  `;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  
-  navigator.serviceWorker.register(swUrl)
-    .then(() => console.log('Service Worker Active'))
-    .catch(err => console.error(err));
-}
-
-// Inisialisasi awal
-initTimePickers();
-setInterval(updateDateTime, 1000);
-updateDateTime();
-loadDataFromCloud();
-setInterval(loadDataFromCloud, 5000);
+setInterval(updateClock, 1000);
+updateClock();
 </script>
 </body>
 </html>
