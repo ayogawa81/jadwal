@@ -215,6 +215,72 @@ tr:hover td { background: rgba(51, 65, 85, 0.3); }
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   color: white; text-align: center; padding: 20px;
 }
+
+/* OVERLAY VIDEO PAMERAN / DISPLAY */
+#videoExpoOverlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #000;
+  z-index: 20000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#videoExpoOverlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+#expoVideoPlayer {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.expo-hud-header {
+  position: absolute;
+  top: 20px; left: 30px;
+  display: flex; align-items: center; gap: 15px;
+  z-index: 20001;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 10px 20px; border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.expo-hud-badge {
+  background: #ef4444; color: white; font-weight: 800; font-size: 0.75rem;
+  padding: 4px 10px; border-radius: 6px; letter-spacing: 1.5px;
+  animation: pulse-live 1.5s infinite;
+}
+
+@keyframes pulse-live {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.expo-hud-title {
+  color: #38bdf8; font-weight: 700; font-size: 1rem; letter-spacing: 1px;
+}
+
+.expo-footer-ticker {
+  position: absolute;
+  bottom: 0; left: 0; width: 100%;
+  background: rgba(2, 6, 23, 0.85);
+  border-top: 2px solid #38bdf8;
+  padding: 12px 30px;
+  z-index: 20001;
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.expo-ticker-text {
+  font-family: 'JetBrains Mono', monospace;
+  color: #f8fafc; font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
@@ -225,6 +291,21 @@ tr:hover td { background: rgba(51, 65, 85, 0.3); }
   <button id="btnUnlockTizen" onclick="bukaKunciAudioTizen()" style="padding: 18px 40px; font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; cursor: pointer; box-shadow: 0 10px 30px rgba(16,185,129,0.4);" autofocus>
     🔊 TEKAN UNTUK AKTIFKAN SUARA
   </button>
+</div>
+
+<!-- POPUP OVERLAY VIDEO PAMERAN -->
+<div id="videoExpoOverlay">
+  <div class="expo-hud-header">
+    <div class="expo-hud-badge">LIVE DISPLAY</div>
+    <div class="expo-hud-title">STAFF LOGISTIK - MILITARY EXPOSITION & DISPLAY</div>
+  </div>
+  
+  <video id="expoVideoPlayer" muted playsinline loop></video>
+
+  <div class="expo-footer-ticker">
+    <div class="expo-ticker-text" id="expoTickerTitle">DISPLAY ALPALHAN & LOGISTIK UTAMA</div>
+    <div style="font-family:'JetBrains Mono'; color:#38bdf8; font-weight:bold; font-size: 0.9rem;">SLOG KORPASGAT</div>
+  </div>
 </div>
 
 <header>
@@ -331,6 +412,83 @@ let currentMinutes = "00";
 let editingRowIndex = -1;
 let spokenSchedules = new Set();
 let audioCtx = null;
+
+/* ========================================================= */
+/* KONFIGURASI BATAS WAKTU & PLAYLIST VIDEO (BISA DIUBAH)    */
+/* ========================================================= */
+
+// 1. Waktu Tampilan Jadwal Standby Sebelum Video Muncul (dalam Milidetik)
+//    Contoh: 10000 = 10 Detik standby di layar jadwal
+let STANDBY_DURATION = 10000; 
+
+// 2. Waktu Lama Video Tayang Sebelum Kembali ke Jadwal (dalam Milidetik)
+//    Contoh: 15000 = 15 Detik tayang video (Atau sesuaikan durasi video)
+let VIDEO_PLAY_DURATION = 15000; 
+
+// 3. Daftar Video Pameran (Playlist / Slide PPT)
+const expoVideoList = [
+  {
+    title: "PROFIL MATERIIL DAN PERALATAN TAKTIKAL LOGISTIK",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+  },
+  {
+    title: "PERALATAN DUKUNGAN OPERASI DAN TACTICAL DISPLAY",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+  },
+  {
+    title: "SIMULASI SISTEM LOGISTIK MODERN KORPASGAT",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+  }
+];
+
+let currentVideoIndex = 0;
+let videoTimer = null;
+
+// Mulai perhitungan standby saat sistem berjalan
+function startStandbyTimer() {
+  clearTimeout(videoTimer);
+  videoTimer = setTimeout(() => {
+    // Cek jika user sedang edit data/buka modal, tunda penampilan video
+    if (editingRowIndex !== -1 || document.getElementById('settingModal').classList.contains('active')) {
+      startStandbyTimer(); 
+      return;
+    }
+    showVideoPopup();
+  }, STANDBY_DURATION);
+}
+
+function showVideoPopup() {
+  const overlay = document.getElementById('videoExpoOverlay');
+  const videoPlayer = document.getElementById('expoVideoPlayer');
+  const tickerTitle = document.getElementById('expoTickerTitle');
+
+  const videoItem = expoVideoList[currentVideoIndex];
+  videoPlayer.src = videoItem.url;
+  tickerTitle.textContent = videoItem.title;
+
+  overlay.classList.add('show');
+  videoPlayer.play().catch(e => console.log("Autoplay:", e));
+
+  // Setelah durasi tayang video selesai, kembali ke mode standby
+  clearTimeout(videoTimer);
+  videoTimer = setTimeout(() => {
+    hideVideoPopup();
+  }, VIDEO_PLAY_DURATION);
+}
+
+function hideVideoPopup() {
+  const overlay = document.getElementById('videoExpoOverlay');
+  const videoPlayer = document.getElementById('expoVideoPlayer');
+
+  overlay.classList.remove('show');
+  videoPlayer.pause();
+
+  // Rotasi video berikutnya untuk penayangan selanjutnya
+  currentVideoIndex = (currentVideoIndex + 1) % expoVideoList.length;
+
+  // Kembali menghitung waktu standby di mode jadwal
+  startStandbyTimer();
+}
 
 const iconPencil = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
 const iconTrash = '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
@@ -774,6 +932,9 @@ setInterval(updateDateTime, 1000);
 updateDateTime();
 loadDataFromCloud();
 setInterval(loadDataFromCloud, 5000);
+
+// Jalankan perputaran timer Standby -> Video
+startStandbyTimer();
 </script>
 </body>
 </html>
